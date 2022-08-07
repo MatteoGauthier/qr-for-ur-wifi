@@ -6,10 +6,12 @@ import {
   Input,
   Select,
   Stack,
+  Text,
 } from '@mantine/core';
 import { toJpeg } from 'html-to-image';
 import dynamic from 'next/dynamic';
 import { SyntheticEvent, useCallback, useRef, useState } from 'react';
+import SEO from '../components/SEO';
 import AlertIcon from '../components/svg/AlertIcon';
 import DownloadIcon from '../components/svg/DownloadIcon';
 import PasswordIcon from '../components/svg/PasswordIcon';
@@ -70,6 +72,7 @@ export default function Home() {
 
   return (
     <Container>
+      <SEO />
       <Grid
         sx={{
           marginTop: '3rem',
@@ -77,6 +80,13 @@ export default function Home() {
         className="grid grid-cols-2"
       >
         <Grid.Col className="col" span={6}>
+          <Text component="h1" size={'xl'}>
+            Créer un QR Code pour votre réseau WIFI
+          </Text>
+          <Text component="h2" weight={'normal'} mb="md">
+            Grace à un QR Code connecter vous plus rapidement à un réseaux WiFi,
+            vous scanner le code et vous êtes connecté 🔥
+          </Text>
           <form onSubmit={handleSubmit}>
             <Stack spacing="md">
               <Input.Wrapper id="ssid" required label="Le nom du réseau (SSID)">
