@@ -43,7 +43,7 @@
 }
 
 @media print {
-  form, button {
+  form, button, h1, h2 {
     display: none;
     opacity: 0;
     visibility: hidden;
