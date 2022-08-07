@@ -44,12 +44,14 @@
 
 @media print {
   form, button {
-    display: none !important;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
   }
   .mantine-Container-root, .mantine-Grid-root {
     margin: 0;
     display: block;
   }
-  @page { margin: 0;size: auto; }
+  @page { margin: 0;size: auto}
   body { margin: 1.6cm; }
 }
