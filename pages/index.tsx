@@ -77,9 +77,8 @@ export default function Home() {
         sx={{
           marginTop: '3rem',
         }}
-        className="grid grid-cols-2"
       >
-        <Grid.Col className="col" span={6}>
+        <Grid.Col className="col" md={6}>
           <Text component="h1" size={'xl'}>
             Créer un QR Code pour votre réseau WIFI
           </Text>
@@ -136,7 +135,7 @@ export default function Home() {
             </Stack>
           </form>
         </Grid.Col>
-        <Grid.Col span={6}>
+        <Grid.Col md={6}>
           <Stack>
             <DocumentViewer docRef={docRef} {...formResult} />
             <Group>
