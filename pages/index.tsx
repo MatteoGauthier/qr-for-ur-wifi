@@ -10,7 +10,7 @@ import {
 } from '@mantine/core';
 import { toJpeg } from 'html-to-image';
 import dynamic from 'next/dynamic';
-import { SyntheticEvent, useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import SEO from '../components/SEO';
 import AlertIcon from '../components/svg/AlertIcon';
 import DownloadIcon from '../components/svg/DownloadIcon';
@@ -38,20 +38,27 @@ export default function Home() {
 
   const docRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = useCallback((e: SyntheticEvent) => {
-    e.preventDefault();
-    const target = e.target as typeof e.target & {
-      ssid: { value: string };
-      password: { value: string };
-      security: { value: string };
-    };
+  // Update formResult directly when inputs change
+  const handleSsidChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormResult((prev) => ({
+      ...prev,
+      ssid: e.currentTarget.value,
+    }));
+  };
 
-    setFormResult({
-      ssid: target.ssid.value,
-      password: target.password.value,
-      security: target.security.value as Security,
-    });
-  }, []);
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormResult((prev) => ({
+      ...prev,
+      password: e.currentTarget.value,
+    }));
+  };
+
+  const handleSecurityChange = (value: string | null) => {
+    setFormResult((prev) => ({
+      ...prev,
+      security: value as Security, // Cast to Security type
+    }));
+  };
 
   const handleDownload = useCallback(() => {
     toJpeg(docRef.current, { cacheBust: true })
@@ -86,54 +93,49 @@ export default function Home() {
             Grace à un QR Code connecter vous plus rapidement à un réseaux WiFi,
             vous scanner le code et vous êtes connecté 🔥
           </Text>
-          <form onSubmit={handleSubmit}>
-            <Stack spacing="md">
-              <Input.Wrapper id="ssid" required label="Le nom du réseau (SSID)">
-                <Input
-                  icon={<WifiIcon />}
-                  id="ssid"
-                  placeholder="BBOX-4567854678986"
-                  required
-                />
-              </Input.Wrapper>
-              <Input.Wrapper
+          <Stack spacing="md">
+            <Input.Wrapper id="ssid" required label="Le nom du réseau (SSID)">
+              <Input
+                icon={<WifiIcon />}
+                id="ssid"
+                placeholder="BBOX-4567854678986"
+                value={formResult.ssid}
+                onChange={handleSsidChange}
+                required
+              />
+            </Input.Wrapper>
+            <Input.Wrapper
+              id="password"
+              required
+              description="Le mot de passe fait minimum 9 caractères"
+              label="Le mot de passe du réseau"
+            >
+              <Input
+                icon={<PasswordIcon />}
+                required
                 id="password"
-                required
-                description="Le mot de passe fait minimum 9 caractères"
-                label="Le mot de passe du réseau"
-              >
-                <Input
-                  icon={<PasswordIcon />}
-                  required
-                  id="password"
-                  placeholder="nB8_8zvNTzLUChjbBraOY"
-                />
-              </Input.Wrapper>
-              <Input.Wrapper
+                placeholder="nB8_8zvNTzLUChjbBraOY"
+                value={formResult.password}
+                onChange={handlePasswordChange}
+              />
+            </Input.Wrapper>
+            <Input.Wrapper
+              id="security"
+              required
+              label="Le type de sécurité du réseau"
+            >
+              <Select
                 id="security"
-                required
-                label="Le type de sécurité du réseau"
-              >
-                <Select
-                  id="security"
-                  icon={<AlertIcon />}
-                  defaultValue="WPA"
-                  data={[
-                    { value: 'WPA', label: 'WPA/WPA2/WPA3 (Le plus courrant)' },
-                    { value: 'WEP', label: 'WEP' },
-                  ]}
-                />
-              </Input.Wrapper>
-
-              <Button
-                variant="gradient"
-                gradient={{ from: 'teal', to: 'blue', deg: 60 }}
-                type={'submit'}
-              >
-                Générer un QR Code
-              </Button>
-            </Stack>
-          </form>
+                icon={<AlertIcon />}
+                value={formResult.security}
+                onChange={handleSecurityChange}
+                data={[
+                  { value: 'WPA', label: 'WPA/WPA2/WPA3 (Le plus courant)' },
+                  { value: 'WEP', label: 'WEP' },
+                ]}
+              />
+            </Input.Wrapper>
+          </Stack>
         </Grid.Col>
         <Grid.Col md={6}>
           <Stack>
